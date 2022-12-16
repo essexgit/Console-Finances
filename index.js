@@ -86,48 +86,42 @@ var finances = [
   ['Jan-2017', 138230],
   ['Feb-2017', 671099]
 ];
-// calculate total months: (last year - first year - 2)*12 +((12 - first month) + (last month))
-//get first and last year, first and last month, as number.
-// var firstDate = new Date(finances[0][0]);
-// var lastDate = new Date(finances[finances.length - 1][0]);
 
-// var firstYear = firstDate.getFullYear();
-// console.log("first year " + firstYear);
-// var secondYear = lastDate.getFullYear();
-// console.log("secondYear " + secondYear);
-// var firstMonth = firstDate.getMonth();
-// console.log("firstMonth " + firstMonth);
-// var secondMonth = lastDate.getMonth();
-// console.log("secondMonth " + secondMonth);
-
-// var totalMonths = (((secondYear - firstYear - 1) * 12) + ((12 - firstMonth) + (secondMonth + 1)));
-
+//After testing with 'Date' methods to check that no months
+// are skipped, total months equals array length
 var totalMonths = finances.length;
 
-console.log("Total Months: " + totalMonths);
 
-// net profit/loss
+//  accumulator for monthly profit/loss
 var netProfit = 0;
 for (let index = 0; index < finances.length; index++) {
-  var netProfit = netProfit + finances[index][1];
+  netProfit = netProfit + finances[index][1];
 }
 
-
-// average of changes in profit, total change/months
-// change each month Mcur - Mcur-1
-// add to total
-var change = 0;
+//  previous array value in loop
 var old = 0;
+//  current array value in loop
+var current = 0;
+//  difference between last month P/L and this month
+var change = 0;
+// accumulator for difference
 var total = 0;
+// store the biggest rise during iteration
 var greatestIncrease = 0;
+// Store biggest loss during iteration
 var greatestFall = 0;
 var greatestIncreaseDate;
 var greatestFallDate;
+
+
 for (var index = 1; index < finances.length; index++) {
   old = finances[index - 1][1];
-  change = finances[index][1] - old;
+  current = finances[index][1];
+  change = current - old;
   total = total + change;
 
+  // greatestIncrease loop through, reuse Change, if increase
+  // and larger than store, swap
   if (change >= 0 && change > greatestIncrease) {
     greatestIncrease = change;
     greatestIncreaseDate = finances[index][0];
@@ -137,22 +131,18 @@ for (var index = 1; index < finances.length; index++) {
   }
 }
 
-console.log(total);
+// total of all monthly changes / number of month spans
 var averageChange = total / (totalMonths - 1);
-console.log("Average change " + averageChange.toFixed(2));
-// var averageChange = (netProfit / totalMonths); var netProfit = 0;
-// for (let index = 0; index < finances.length; index++) {
-//   var netProfit = netProfit + finances[index][1];
-// }
 
-// averageChange = averageChange.toLocaleString();
-console.log("Average Monthly Change £" + averageChange.toFixed(2).toLocaleString());
+// Output title
+console.log("Financial Analysis");
+console.log("----------------------------");
+console.log("Total Months: " + totalMonths);
+// log Total (net p/l)
+console.log("Total: " + new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(netProfit));
 
-console.log("Increase " + greatestIncrease + " on " + greatestIncreaseDate);
-console.log("Fall " + greatestFall + " on " + greatestFallDate);
-// greatestIncrease loop through, get change if increase
-// and larger than store, swap
-// var greatestIncrease = 0;
-// for (let index = 0; index < finances.length; index++) {
-//   var netProfit = netProfit + finances[index][1];
-// }
+console.log("Average Change: " + new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(averageChange));
+
+console.log("Greatest Increase in Profits: " + greatestIncreaseDate + " " + new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(greatestIncrease));
+
+console.log("Greatest Decrease in Profits: " + greatestFallDate + " " + new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(greatestFall));
