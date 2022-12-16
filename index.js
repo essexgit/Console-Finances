@@ -121,13 +121,20 @@ var old = 0;
 var total = 0;
 var greatestIncrease = 0;
 var greatestFall = 0;
+var greatestIncreaseDate;
+var greatestFallDate;
 for (var index = 1; index < finances.length; index++) {
   old = finances[index - 1][1];
   change = finances[index][1] - old;
   total = total + change;
+
   if (change >= 0 && change > greatestIncrease) {
     greatestIncrease = change;
-  } else if ()
+    greatestIncreaseDate = finances[index][0];
+  } else if (change < 0 && change < greatestFall) {
+    greatestFall = change;
+    greatestFallDate = finances[index][0];
+  }
 }
 
 console.log(total);
@@ -141,6 +148,8 @@ console.log("Average change " + averageChange.toFixed(2));
 // averageChange = averageChange.toLocaleString();
 console.log("Average Monthly Change £" + averageChange.toFixed(2).toLocaleString());
 
+console.log("Increase " + greatestIncrease + " on " + greatestIncreaseDate);
+console.log("Fall " + greatestFall + " on " + greatestFallDate);
 // greatestIncrease loop through, get change if increase
 // and larger than store, swap
 // var greatestIncrease = 0;
